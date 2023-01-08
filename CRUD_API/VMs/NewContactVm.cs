@@ -7,7 +7,7 @@
         public string? Email { get; set; }
 
         //Relationships
-        public List<NewPhoneVm>? Phones { get; set; }
+        public List<PostPhoneVm>? Phones { get; set; }
 
         public NewLocationVm? Location { get; set; }
     }

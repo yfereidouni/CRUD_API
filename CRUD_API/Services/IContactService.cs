@@ -10,6 +10,7 @@ public interface IContactService
     Task<IEnumerable<Contact>> GetAllContactsWithOptionalDependenciesAsync(params Expression<Func<Contact, object>>[] includeProperties);
     Task<IEnumerable<Contact>> GetAllContactsWithAllDependenciesAsync();
     Task<Contact> GetContactByIdWithAllDependenciesAsync(int id);
-    Task<int> AddNewContactWithDependenciesAsync(ContactRequestVm data);
+    Task<int> CreateContactWithDependenciesAsync(PostContactRequestVm data);
+    Task<int> UpdateContactWithDependenciesAsync(PutContactRequestVm data);
 }
 
