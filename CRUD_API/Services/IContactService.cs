@@ -12,5 +12,6 @@ public interface IContactService
     Task<Contact> GetContactByIdWithAllDependenciesAsync(int id);
     Task<int> CreateContactWithDependenciesAsync(PostContactRequestVm data);
     Task<int> UpdateContactWithDependenciesAsync(PutContactRequestVm data);
+    Task<int> DeleteContactWithDependenciesAsync(int id);
 }
 

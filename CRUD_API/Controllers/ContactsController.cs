@@ -47,5 +47,12 @@ namespace CRUD_API.Controllers
             var result = await _contactService.UpdateContactWithDependenciesAsync(data);
             return Ok(result);
         }
+
+        [HttpDelete]
+        public async Task<ActionResult<int>> DeleteContact(int id)
+        {
+            var result = await _contactService.DeleteContactWithDependenciesAsync(id);
+            return Ok(result);
+        }
     }
 }

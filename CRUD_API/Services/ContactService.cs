@@ -81,7 +81,7 @@ public class ContactService : IContactService
         var contact = await GetContactByIdWithAllDependenciesAsync(data.Id);
 
         contact.Location.City = data.Location!.City;
-        contact.Location.StreetName= data.Location.StreetName;
+        contact.Location.StreetName = data.Location.StreetName;
         contact.Location.StreetNumber = data.Location.StreetNumber;
         contact.Location.PostalCode = data.Location.PostalCode;
 
@@ -96,7 +96,7 @@ public class ContactService : IContactService
                 }
             }
         }
-        
+
         contact.FirstName = data.FirstName;
         contact.LastName = data.LastName;
         contact.Email = data.Email;
@@ -105,4 +105,18 @@ public class ContactService : IContactService
 
         return contact.Id;
     }
+
+    public async Task<int> DeleteContactWithDependenciesAsync(int id)
+    {
+        var contact = await GetContactByIdWithAllDependenciesAsync(id);
+        
+        contact.Phones.Clear();
+
+        await _contactRepository.Delete(contact);
+        
+        await _locationRepository.Delete(contact.Location);
+
+        return contact.Id;
+    }
+
 }
