@@ -25,9 +25,22 @@ public class ContactService : IContactService
         _locationRepository = locationRepository;
         _phoneRepository = phoneRepository;
     }
+    public async Task<IEnumerable<Contact>> GetAllContactsWithAllDependenciesAsync()
+    {
+        return await _contactRepository.GetAllContactsWithAllDependenciesAsync();
+    }
 
+    public async Task<IEnumerable<Contact>> GetAllContactsWithOptionalDependenciesAsync(params Expression<Func<Contact, object>>[] includeProperties)
+    {
+        return await _contactRepository.GetAllWithOptionalDependenciesAsync(includeProperties);
+    }
 
-    public async Task<int> AddNewContactWithDependenciesAsync(ContactRequestVm data)
+    public async Task<Contact> GetContactByIdWithAllDependenciesAsync(int id)
+    {
+        return await _contactRepository.GetContactByIdWithAllDependenciesAsync(id);
+    }
+
+    public async Task<int> CreateContactWithDependenciesAsync(PostContactRequestVm data)
     {
         var location = new Location
         {
@@ -59,24 +72,51 @@ public class ContactService : IContactService
             };
             await _phoneRepository.Add(newPhone);
         }
-        
+
         return newContact.Id;
     }
 
-
-
-    public Task<IEnumerable<Contact>> GetAllContactsWithOptionalDependenciesAsync(params Expression<Func<Contact, object>>[] includeProperties)
+    public async Task<int> UpdateContactWithDependenciesAsync(PutContactRequestVm data)
     {
-        return _contactRepository.GetAllWithOptionalDependenciesAsync(includeProperties);
+        var contact = await GetContactByIdWithAllDependenciesAsync(data.Id);
+
+        contact.Location.City = data.Location!.City;
+        contact.Location.StreetName = data.Location.StreetName;
+        contact.Location.StreetNumber = data.Location.StreetNumber;
+        contact.Location.PostalCode = data.Location.PostalCode;
+
+        foreach (var phone in contact.Phones)
+        {
+            foreach (var ph in data.Phones)
+            {
+                if (phone.Id == ph.Id)
+                {
+                    phone.PhoneNumber = ph.PhoneNumber;
+                    phone.PhoneTypeId = ph.PhoneTypeId;
+                }
+            }
+        }
+
+        contact.FirstName = data.FirstName;
+        contact.LastName = data.LastName;
+        contact.Email = data.Email;
+
+        await _contactRepository.Update(contact);
+
+        return contact.Id;
     }
 
-    public async Task<IEnumerable<Contact>> GetAllContactsWithAllDependenciesAsync()
+    public async Task<int> DeleteContactWithDependenciesAsync(int id)
     {
-        return await _contactRepository.GetAllContactsWithAllDependenciesAsync();
+        var contact = await GetContactByIdWithAllDependenciesAsync(id);
+        
+        contact.Phones.Clear();
+
+        await _contactRepository.Delete(contact);
+        
+        await _locationRepository.Delete(contact.Location);
+
+        return contact.Id;
     }
 
-    public async Task<Contact> GetContactByIdWithAllDependenciesAsync(int id)
-    {
-        return await _contactRepository.GetContactByIdWithAllDependenciesAsync(id);
-    }
 }

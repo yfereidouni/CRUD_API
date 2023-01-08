@@ -2,7 +2,6 @@
 using CRUD_API.Services;
 using CRUD_API.VMs;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace CRUD_API.Controllers
 {
@@ -35,11 +34,25 @@ namespace CRUD_API.Controllers
 
         [HttpPost]
         [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
-        public async Task<ActionResult<int>> CreateContact([FromBody] ContactRequestVm data)
+        public async Task<ActionResult<int>> CreateContact([FromBody] PostContactRequestVm data)
         {
-            var result = await _contactService.AddNewContactWithDependenciesAsync(data);
+            var result = await _contactService.CreateContactWithDependenciesAsync(data);
             return Ok(result);
         }
 
+        [HttpPut]
+        [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
+        public async Task<ActionResult<int>> UpdateContact([FromBody] PutContactRequestVm data)
+        {
+            var result = await _contactService.UpdateContactWithDependenciesAsync(data);
+            return Ok(result);
+        }
+
+        [HttpDelete]
+        public async Task<ActionResult<int>> DeleteContact(int id)
+        {
+            var result = await _contactService.DeleteContactWithDependenciesAsync(id);
+            return Ok(result);
+        }
     }
 }

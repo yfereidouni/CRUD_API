@@ -16,6 +16,23 @@ public class AppDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+
+        //modelBuilder.Entity<Phone>()
+        //    .HasKey(e => new { e.AId, e.BId });
+
+        //modelBuilder.Entity<Phone>()
+        //    .HasOne(e => e.PhoneType)
+        //    .WithMany(e => e.)
+        //    .HasForeignKey(e => e.AId)
+        //    .OnDelete(DeleteBehavior.Cascade); // <= This entity has cascading behaviour on deletion
+
+        //modelBuilder.Entity<AB>()
+        //    .HasOne(e => e.B)
+        //    .WithMany(e => e.ABs)
+        //    .HasForeignKey(e => e.BId)
+        //    .OnDelete(DeleteBehavior.Restrict); // <= This entity has restricted behaviour on deletion
+
+
         //modelBuilder.Entity<Phone>().HasKey(p => new { p.ContactId, p.PhoneTypeId });
 
         //modelBuilder.Entity<Phone>()
@@ -46,9 +63,21 @@ public class AppDbContext : DbContext
 
 
         //modelBuilder.Entity<Phone>()
-        //    .HasOne(pt => pt.PhoneType).WithMany(ph => ph.Phones).HasForeignKey(pt => pt.PhoneTypeId);
+        //    .HasOne(pt => pt.PhoneType)
+        //    .WithMany(c => c.Phones)
+        //    .HasForeignKey(pt => pt.PhoneTypeId);
+
         //modelBuilder.Entity<Phone>()
-        //    .HasOne(c => c.Contact).WithMany(ph => ph.Phones).HasForeignKey(c => c.ContactId);
+        //    .HasOne(c => c.Contact)
+        //    .WithMany(ph => ph.Phones)
+        //    .HasForeignKey(c => c.ContactId)
+        //    .OnDelete(DeleteBehavior.Cascade);
+
+        //modelBuilder.Entity<Contact>()
+        //    .HasOne(l => l.Location)
+        //    .WithMany(c => Contacts)
+        //    .HasForeignKey(c => c.LocationId)
+        //    .OnDelete(DeleteBehavior.Cascade);
 
         base.OnModelCreating(modelBuilder);
     }
